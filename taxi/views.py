@@ -59,6 +59,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
     queryset = Car.objects.all().select_related("manufacturer")
     context_object_name = "car_list"
 
+
 class CarDetailView(LoginRequiredMixin, generic.DetailView):
     model = Car
 
@@ -107,11 +108,13 @@ class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
     context_object_name = "driver"
 
+
 class RemoveDriverFromCarView(LoginRequiredMixin, View):
     def post(self, request, pk):
         car = get_object_or_404(Car, id=pk)
         car.drivers.remove(request.user)
         return redirect("taxi:car-detail", pk=pk)
+
 
 class AssignDriverToCar(LoginRequiredMixin, View):
     def post(self, request, pk):
